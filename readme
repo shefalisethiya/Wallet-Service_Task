@@ -76,3 +76,129 @@ Stores all credit/debit operations (including failed ones).
 - reference_id (UNIQUE for idempotency)
 - failure_reason
 - created_at
+---------------------------------------------------------
+endpoints& their payload
+CREATE USER
+🔹 Endpoint :POST http://localhost:3000/users
+request
+{
+  "userId": 1,
+  "user_name": "Shefali Sethiya",
+  "user_email": "shefali@email.com",
+  "user_phone": "9876543210"
+}
+Headers
+Content-Type: application/json
+Body (JSON)
+{
+  "userId": 1,
+  "user_name": "Shefali Sethiya",
+  "user_email": "shefali@email.com",
+  "user_phone": "9876543210"
+}
+Success Response (201)
+{
+  "message": "User created successfully",
+  "user": {
+    "userId": 1,
+    "user_name": "Shefali Sethiya",
+    "user_email": "shefali@email.com",
+    "user_phone": "9876543210"
+  }
+}
+CREATE WALLET
+🔹 Endpoint
+POST /wallets
+
+🔹 Full URL
+POST http://localhost:3000/wallets
+
+🔹 Headers
+Content-Type: application/json
+
+🔹 Body (JSON)
+{
+  "userId": 1
+}
+Success Response (201)
+{
+  "message": "Wallet created successfully",
+  "balance": 0
+}
+3️⃣ CREDIT WALLET
+🔹 Endpoint
+POST /wallets/:userId/credit
+
+🔹 Full URL
+POST http://localhost:3000/wallets/1/credit
+
+🔹 Headers
+Content-Type: application/json
+
+🔹 Body (JSON)
+{
+  "amount": 1000,
+  "referenceId": "credit-ref-001"
+}
+
+✅ Success Response (200)
+{
+  "message": "Wallet credited successfully",
+  "balance": 1000
+}
+4️⃣ DEBIT WALLET
+🔹 Endpoint
+POST /wallets/:userId/debit
+
+🔹 Full URL
+POST http://localhost:3000/wallets/1/debit
+
+🔹 Headers
+Content-Type: application/json
+
+🔹 Body (JSON)
+{
+  "amount": 300,
+  "referenceId": "debit-ref-001"
+}
+
+✅ Success Response (200)
+{
+  "message": "Wallet debited successfully",
+  "balance": 700
+}
+
+❌ Failed (Insufficient Balance)
+{
+  "error": "Insufficient balance"
+}
+5️⃣ GET WALLET DETAILS
+🔹 Endpoint
+GET /wallets/:userId
+
+🔹 Full URL
+GET http://localhost:3000/wallets/1
+
+🔹 Headers
+Content-Type: application/json
+
+🔹 Body
+
+❌ No body required
+
+✅ Success Response (200)
+{
+  "userId": "1",
+  "balance": 700,
+  "transactions": [
+    {
+      "transaction_id": "uuid",
+      "type": "DEBIT",
+      "amount": 300,
+      "status": "SUCCESS",
+      "reference_id": "debit-ref-001",
+      "failure_reason": null,
+      "created_at": "2026-02-11T10:00:00.000Z"
+    }
+  ]
+}
