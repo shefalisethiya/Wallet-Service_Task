@@ -1,0 +1,78 @@
+# Mini Wallet Service
+
+Overview
+
+Mini Wallet Service is a backend application built using **Node.js, Express, and MySQL**.  
+It simulates a real-world wallet system that supports:
+
+- User creation
+- Wallet creation (one wallet per user)
+- Credit money
+- Debit money
+- View wallet balance and last 10 transactions
+
+The system is designed with a strong focus on:
+
+- I. Data consistency  
+- II. Concurrency handling  
+- III. Idempotency  
+- IV. Atomic transactions  
+
+---
+
+Tech Stack
+
+## Node.js
+## Express.js
+## MySQL (InnoDB Engine)
+## mysql2 (Promise-based driver)
+
+---
+
+ Architecture
+
+Client → Express API → MySQL Database
+
+The application uses:
+
+- MySQL connection pooling
+- Database-level constraints
+- SQL transactions for atomic operations
+- Row-level locking for concurrency control
+
+---
+
+# 🗄 Database Design
+
+The system contains three tables:
+
+## 1 users
+Stores user information.
+
+- user_id (UNIQUE)
+- user_name
+- user_email (UNIQUE)
+- user_phone (UNIQUE)
+- created_at
+
+## 2 wallets
+Stores wallet balance.
+
+- user_id (UNIQUE)
+- balance (DECIMAL)
+- created_at
+- updated_at
+
+One user → One wallet (enforced using UNIQUE constraint).
+
+## 3 transactions
+Stores all credit/debit operations (including failed ones).
+
+- transaction_id (UNIQUE)
+- user_id
+- type (CREDIT / DEBIT)
+- amount
+- status (SUCCESS / FAILED)
+- reference_id (UNIQUE for idempotency)
+- failure_reason
+- created_at
