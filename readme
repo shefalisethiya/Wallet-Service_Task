@@ -77,6 +77,14 @@ Stores all credit/debit operations (including failed ones).
 - failure_reason
 - created_at
 ---------------------------------------------------------
+Recommended Testing Order
+
+1️⃣ Create User
+2️⃣ Create Wallet
+3️⃣ Credit Wallet
+4️⃣ Debit Wallet
+5️⃣ Get Wallet Details
+-----------------------------------------------
 endpoints& their payload
 CREATE USER
 🔹 Endpoint :POST http://localhost:3000/users
